@@ -16,9 +16,7 @@ bank_split <- initial_split(bank_clean, prop = 0.75,
                              strata = y)
 
 bank_training <- bank_split %>% training()
-
 bank_test <- bank_split %>% testing()
-
 bank_folds <- vfold_cv(bank_training, v = 10)
 
 
@@ -29,7 +27,7 @@ bank_recipe <- recipe(y ~ ., data = bank_training) %>%
   step_dummy(all_nominal(), -all_outcomes())
 
 
-bank_recipe %>% 
+bank_clean_baked<-bank_recipe %>% 
   prep() %>% 
   bake(new_data = bank_training)
 
@@ -87,3 +85,12 @@ tree_last_fit %>% collect_predictions() %>%
 tree_predictions <- tree_last_fit %>% collect_predictions()
 
 conf_mat(tree_predictions, truth = y, estimate = .pred_class)
+
+predict(tree_last_fit$.workflow[[1]],bank_test[15,])
+
+saveRDS(tree_last_fit$.workflow[[1]],"./saved_model.Rds")
+
+trained_model<-readRDS("saved_model.Rds")
+
+
+
