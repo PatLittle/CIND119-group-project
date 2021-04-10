@@ -1,0 +1,72 @@
+---
+title: "CIND119 - Group Project"
+date: "10/04/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(tidymodels)
+library(vip)
+library(rpart.plot)
+library(DataExplorer)
+```
+
+## Memebers
+
+Patrick Litte, patrick.little@ryerson.ca
+Manjola Chiappetta, m1chiappetta@ryerson.ca
+
+## Summary
+
+This section is a summary of the project. 
+
+instructions: 
+Write an abstract (a kind of a summary) to describe your project. The abstract must be within 175 to 250 words (inclusive). To write the abstract, first state the problem you are addressing. For example, if your project is on Churn analysis, then give a brief explanation of it. Second, write the summary of your classification results (e.g., accuracy). Third, state key points about the post-predictive analysis and fourth, summarize your recommendations to the organization. 
+
+
+## Workload Distribution
+
+| Member Name        | List of Tasks Preformed |
+|--------------------|-------------------------|
+| Patrick Little     | - some tasks            |
+| Manjola Chiappetta | - some tasks            |
+
+## Exploratory Data Analysis
+
+In this section we will:
+  - Look at the attribute types in the dataset
+  - Find and missing values
+  - Find max,min,mean and standard deviation of the atttributes
+  - Determine any outlier values for the attributes under consideration
+  - Analyze the distribution of numeric attributes
+
+```{r}
+bank<-read.csv("https://raw.githubusercontent.com/PatLittle/CIND119-group-project/main/bank_marketing/bank.csv")
+
+introduce(bank)
+plot_intro(bank)
+plot_missing(bank)
+#plot_bar(bank, by = "y")
+plot_histogram(bank)
+
+plot_correlation(na.omit(bank), type = "d")
+
+
+str(bank)
+colSums(is.na(bank))
+```
+
+## Predictive Modeling / Classification
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Conclusions and Recommendations

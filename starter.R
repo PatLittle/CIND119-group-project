@@ -2,11 +2,33 @@ library(tidyverse)
 library(tidymodels)
 library(vip)
 library(rpart.plot)
+library(DataExplorer)
 
+###DATA LOAD
 bank<-read.csv("https://raw.githubusercontent.com/PatLittle/CIND119-group-project/main/bank_marketing/bank.csv")
+
+
+
+###EDA
+
+introduce(bank)
+plot_intro(bank)
+plot_missing(bank)
+plot_bar(bank, by = "y")
+plot_histogram(bank)
+
+plot_correlation(na.omit(bank), type = "d")
+
 
 str(bank)
 colSums(is.na(bank))
+
+
+
+
+
+###Decision Tree
+
 
 
 bank_clean<- bank %>% mutate_if(is.character, factor)
@@ -92,5 +114,51 @@ saveRDS(tree_last_fit$.workflow[[1]],"./saved_model.Rds")
 
 trained_model<-readRDS("saved_model.Rds")
 
+###Naive Bayes
+
+set.seed(888)
+nb_split <- initial_split(bank_clean, prop = 0.75, 
+                            strata = y)
+
+nb_training <- nb_split %>% training()
+nb_test <- nb_split %>% testing()
+nb_folds <- vfold_cv(nb_training, v = 10)
+
+nb_recipe <- recipe(y ~ ., data = nb_training) %>% 
+  step_YeoJohnson(all_numeric(), -all_outcomes()) %>% 
+  step_normalize(all_numeric(), -all_outcomes()) %>% 
+  step_dummy(all_nominal(), -all_outcomes())
 
 
+nb_wf <- workflow() %>%
+  add_recipe(nb_recipe)
+
+library(discrim)
+nb_spec <- naive_Bayes() %>%
+  set_mode("classification") %>%
+  set_engine("naivebayes")
+
+nb_spec
+
+nb_fit <- nb_wf %>%
+  add_model(nb_spec) %>%
+  fit(data = nb_training)
+
+nb_wf_final <-  workflow() %>%
+  add_recipe(nb_recipe) %>%
+  add_model(nb_spec)
+
+nb_rs <- fit_resamples(
+  nb_wf_final,
+  nb_folds,
+  control = control_resamples(save_pred = TRUE)
+)
+
+
+nb_last_fit <- nb_wf_final %>% 
+  last_fit(nb_split)
+
+nb_last_fit %>% collect_metrics()
+
+nb_predictions <- nb_last_fit %>% collect_predictions()
+conf_mat(nb_predictions, truth = y, estimate = .pred_class)
