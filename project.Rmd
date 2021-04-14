@@ -1,7 +1,9 @@
 ---
 title: "CIND119 - Group Project"
 date: "10/04/2021"
-output: html_document
+output:
+  word_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -16,7 +18,7 @@ library(DataExplorer)
 
 ## Memebers
 
-Patrick Litte, patrick.little@ryerson.ca
+Patrick Litte, patrick.little@ryerson.ca <br>
 Manjola Chiappetta, m1chiappetta@ryerson.ca
 
 ## Summary
