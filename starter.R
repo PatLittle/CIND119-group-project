@@ -124,10 +124,8 @@ nb_training <- nb_split %>% training()
 nb_test <- nb_split %>% testing()
 nb_folds <- vfold_cv(nb_training, v = 10)
 
-nb_recipe <- recipe(y ~ ., data = nb_training) %>% 
-  step_YeoJohnson(all_numeric(), -all_outcomes()) %>% 
-  step_normalize(all_numeric(), -all_outcomes()) %>% 
-  step_dummy(all_nominal(), -all_outcomes())
+nb_recipe <- recipe(y ~ ., data = nb_training)
+  
 
 
 nb_wf <- workflow() %>%

@@ -5,7 +5,7 @@ library(e1071)
 
 
 
-bank<-read.csv("Desktop/bank.csv", 
+bank<-read.csv("https://raw.githubusercontent.com/PatLittle/CIND119-group-project/main/bank_marketing/bank.csv", 
                stringsAsFactors = FALSE, header = T)
 bank$job_unk <- ifelse(bank$job == "unknown", 1, 0)
 bank$edu_unk <- ifelse(bank$education == "unknown", 1, 0)
