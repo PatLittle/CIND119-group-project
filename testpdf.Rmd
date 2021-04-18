@@ -1,0 +1,22 @@
+---
+title: "test"
+author: "Patrick Little &  Manjola Chiappetta"
+date: "18/04/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(DataExplorer)
+```
+
+```{r}
+bank<-read.csv("https://raw.githubusercontent.com/PatLittle/CIND119-group-project/main/bank_marketing/bank.csv")
+plot_intro(bank)
+
+plot_str(bank, type="d", print_network = T, fontSize=25)
+```
+
